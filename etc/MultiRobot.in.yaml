@@ -1,0 +1,103 @@
+---
+# If true, the FSM transitions are managed by an external tool
+Managed: false
+# If true and the FSM is self-managed, transitions should be triggered
+StepByStep: true
+# Change idle behaviour, if true the state is kept until transition,
+# otherwise the FSM holds the last state until transition
+IdleKeepState: false
+# Where to look for state libraries
+StatesLibraries:
+- "@MC_STATES_DEFAULT_RUNTIME_INSTALL_PREFIX@"
+- "@MC_STATES_RUNTIME_INSTALL_PREFIX@"
+# Where to look for state files
+StatesFiles:
+- "@MC_STATES_DEFAULT_RUNTIME_INSTALL_PREFIX@/data"
+- "@MC_STATES_RUNTIME_INSTALL_PREFIX@/data"
+# If true, state factory will be more verbose
+VerboseStateFactory: false
+# Additional robots to load
+robots:
+  robot_2:
+    module: JVRC1
+    init_pos:
+      translation: [1.0, 0, 0.79]
+      rotation: [0, 0, 3.14]
+  robot_3:
+    module: JVRC1
+    init_pos:
+      translation: [-1.0, 0, 0.79]
+      rotation: [0, 0, 0]
+  robot_4:
+    module: JVRC1
+    init_pos:
+      translation: [2.0, 0, 0.79]
+      rotation: [0, 0, 3.14]
+  ground:
+    module: env/ground
+# General constraints, always on
+constraints:
+- type: contact
+- type: kinematics
+  damper: [0.1, 0.01, 0.5]
+- type: kinematics
+  robot: robot_2
+  damper: [0.1, 0.01, 0.5]
+- type: kinematics
+  robot: robot_3
+  damper: [0.1, 0.01, 0.5]
+- type: kinematics
+  robot: robot_4
+  damper: [0.1, 0.01, 0.5]
+- type: compoundJoint
+- type: compoundJoint
+  robot: robot_2
+- type: compoundJoint
+  robot: robot_3
+- type: compoundJoint
+  robot: robot_4
+# Collision constraint
+collisions:
+- type: collision
+  useMinimal: true
+# Initial set of contacts
+contacts:
+- r1: jvrc1
+  r2: ground
+  r1Surface: LeftFoot
+  r2Surface: AllGround
+- r1: jvrc1
+  r2: ground
+  r1Surface: RightFoot
+  r2Surface: AllGround
+- r1: robot_2
+  r2: ground
+  r1Surface: LeftFoot
+  r2Surface: AllGround
+- r1: robot_2
+  r2: ground
+  r1Surface: RightFoot
+  r2Surface: AllGround
+- r1: robot_3
+  r2: ground
+  r1Surface: LeftFoot
+  r2Surface: AllGround
+- r1: robot_3
+  r2: ground
+  r1Surface: RightFoot
+  r2Surface: AllGround
+- r1: robot_4
+  r2: ground
+  r1Surface: LeftFoot
+  r2Surface: AllGround
+- r1: robot_4
+  r2: ground
+  r1Surface: RightFoot
+  r2Surface: AllGround
+# Implement some additional text states
+states: {}
+# Transitions map
+transitions:
+- [MultiRobot_Initial, OK, MultiRobot_Initial, Strict]
+# Initial state
+init: MultiRobot_Initial
