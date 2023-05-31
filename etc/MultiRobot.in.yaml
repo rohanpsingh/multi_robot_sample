@@ -19,20 +19,20 @@ VerboseStateFactory: false
 # Additional robots to load
 robots:
   robot_2:
-    module: JVRC1
+    module: aliengo
     init_pos:
-      translation: [1.0, 0, 0.79]
-      rotation: [0, 0, 3.14]
+      translation: [0.5, -0.5, 0.50]
+      rotation: [0, 0, 0.35]
   robot_3:
-    module: JVRC1
+    module: HRP5P
     init_pos:
-      translation: [-1.0, 0, 0.79]
-      rotation: [0, 0, 0]
+      translation: [0.3, 1, 0.79]
+      rotation: [0, 0, -0.78]
   robot_4:
-    module: JVRC1
+    module: HRP4CR
     init_pos:
-      translation: [2.0, 0, 0.79]
-      rotation: [0, 0, 3.14]
+      translation: [0.3, -1, 0.79]
+      rotation: [0, 0, 0.78]
   ground:
     module: env/ground
 # General constraints, always on
@@ -70,14 +70,6 @@ contacts:
   r2: ground
   r1Surface: RightFoot
   r2Surface: AllGround
-- r1: robot_2
-  r2: ground
-  r1Surface: LeftFoot
-  r2Surface: AllGround
-- r1: robot_2
-  r2: ground
-  r1Surface: RightFoot
-  r2Surface: AllGround
 - r1: robot_3
   r2: ground
   r1Surface: LeftFoot
@@ -95,9 +87,17 @@ contacts:
   r1Surface: RightFoot
   r2Surface: AllGround
 # Implement some additional text states
-states: {}
+states:
+  Initialize:
+    base: MetaTasks
+    tasks:
+      InitialTask:
+        type: posture
+        stiffness: 1.0
+        weight: 1.0
+
 # Transitions map
 transitions:
-- [MultiRobot_Initial, OK, MultiRobot_Initial, Strict]
+- [Initialize, OK, Initialize, Strict]
 # Initial state
-init: MultiRobot_Initial
+init: Initialize
